@@ -61,7 +61,7 @@ def etl_bls_data():
         # --- Load ---
         # Write the transformed DataFrame to a JSON file
         # `orient='records'` creates a JSON array of objects, similar to results.json
-        transformed_df.write_json(output_file, orient='records', pretty=True)
+        transformed_df.write_json(output_file)
 
         print(f"Successfully processed data and saved to {output_file}")
         print(f"Number of records processed: {len(transformed_df)}")
