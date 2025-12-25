@@ -26,9 +26,6 @@ def etl_bls_data():
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
 
-    # Define the OCC_CODE to filter for Computer and Mathematical Occupations
-    tech_occ_code_filter = "15-0000"
-
     # Define columns to be cast to numeric types
     int_cols = [
         'TOT_EMP', 'A_MEAN', 'A_PCT10', 'A_PCT25', 'A_MEDIAN', 'A_PCT75', 'A_PCT90'
@@ -45,8 +42,8 @@ def etl_bls_data():
         df = pl.read_csv(input_file, null_values=['#', '*'])
 
         # --- Transform ---
-        # 1. Filter the DataFrame for the specified OCC_CODE
-        filtered_df = df.filter(pl.col("OCC_CODE") == tech_occ_code_filter)
+        # 1. Filter the DataFrame for Computer and Mathematical Occupations using OCC_CODE
+        filtered_df = df.filter(pl.col("OCC_CODE") == "00-0000")
 
         # 2. Cast columns to their correct data types
         # The `strict=False` argument will insert nulls on conversion errors.
@@ -60,7 +57,6 @@ def etl_bls_data():
 
         # --- Load ---
         # Write the transformed DataFrame to a JSON file
-        # `orient='records'` creates a JSON array of objects, similar to results.json
         transformed_df.write_json(output_file)
 
         print(f"Successfully processed data and saved to {output_file}")
