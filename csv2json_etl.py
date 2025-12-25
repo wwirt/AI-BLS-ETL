@@ -20,7 +20,7 @@ def etl_bls_data():
     input_dir = 'input'
     output_dir = 'output'
     input_file = os.path.join(input_dir, 'USBLSStats.csv')
-    output_file = os.path.join(output_dir, 'TechOccupations.json')
+    output_file = os.path.join(output_dir, 'OccupationStats.json')
 
     # Create output directory if it doesn't exist
     if not os.path.exists(output_dir):
@@ -45,7 +45,7 @@ def etl_bls_data():
     try:
         # --- Extract & Transform (Lazy) ---
         # The filter is applied during the read, minimizing data loaded into memory.
-        lazy_df = pl.scan_csv(input_file, null_values=['#', '*'], dtypes=dtypes)
+        lazy_df = pl.scan_csv(input_file, null_values=['#', '*', '**'], dtypes=dtypes)
 
         # 1. Filter the DataFrame for Computer and Mathematical Occupations using OCC_CODE
         filtered_lazy_df = lazy_df.filter(pl.col("OCC_CODE") == "00-0000")
