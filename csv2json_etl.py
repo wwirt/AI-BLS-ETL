@@ -35,25 +35,25 @@ def etl_bls_data():
         'H_PCT10', 'H_PCT25', 'H_MEDIAN', 'H_PCT75', 'H_PCT90'
     ]
 
+    # Define dtypes for scanning to avoid extra casting pass
+    dtypes = {
+        **{col: pl.Utf8 for col in ['AREA', 'AREA_TITLE', 'PRIM_STATE', 'OCC_CODE', 'OCC_TITLE', 'O_GROUP']},
+        **{col: pl.Int64 for col in int_cols},
+        **{col: pl.Float64 for col in float_cols}
+    }
+
     try:
-        # --- Extract ---
-        # Read the CSV file, treating '#' and '*' as null values.
-        # Polars will infer column types.
-        df = pl.read_csv(input_file, null_values=['#', '*'])
+        # --- Extract & Transform (Lazy) ---
+        # The filter is applied during the read, minimizing data loaded into memory.
+        lazy_df = pl.scan_csv(input_file, null_values=['#', '*'], dtypes=dtypes)
 
-        # --- Transform ---
         # 1. Filter the DataFrame for Computer and Mathematical Occupations using OCC_CODE
-        filtered_df = df.filter(pl.col("OCC_CODE") == "00-0000")
+        filtered_lazy_df = lazy_df.filter(pl.col("OCC_CODE") == "00-0000")
 
-        # 2. Cast columns to their correct data types
-        # The `strict=False` argument will insert nulls on conversion errors.
-        transformed_df = filtered_df.with_columns([
-            pl.col('AREA').cast(pl.Utf8)
-        ] + [
-            pl.col(c).cast(pl.Int64, strict=False) for c in int_cols
-        ] + [
-            pl.col(c).cast(pl.Float64, strict=False) for c in float_cols
-        ])
+        # The casting is now handled by `dtypes` in scan_csv, so a separate
+        # .with_columns for casting is no longer needed for performance.
+        # We only need to trigger the computation.
+        transformed_df = filtered_lazy_df.collect()
 
         # --- Load ---
         # Write the transformed DataFrame to a JSON file
