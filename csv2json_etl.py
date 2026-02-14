@@ -12,9 +12,9 @@ It then saves the resulting JSON files to a specified output directory.
 import polars as pl
 import os
 
-def etl_bls_data():
+def etl_bls_stats():
     # Extract - Define input and output file paths
-    input_dir = 'input'
+    input_dir = 'input\statistic_data'
     output_dir = 'output'
     input_file = os.path.join(input_dir, 'USBLSStats.csv')
     output_file = os.path.join(output_dir, 'OccupationStats.json')
@@ -60,4 +60,4 @@ def etl_bls_data():
         print(f"An error occurred: {e}")
 
 if __name__ == "__main__":
-    etl_bls_data()
+    etl_bls_stats()
