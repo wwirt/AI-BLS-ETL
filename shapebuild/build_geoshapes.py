@@ -1,6 +1,5 @@
 # This Python code reads the Census CBSA shapefile and State shapefile to build the shape for the national map.
 # It uses the GeoPandas library to read the shapefiles and perform spatial operations to create a unified shape for the national map.
-# The two shapes are merged together to create a single shape, removes the overlaps, and is simplified to reduce the complexity of the shape for better performance when rendering the map.
 # Finally, the resulting shape is saved as a GeoJSON file for use in the map visualization.
 
 import geopandas as gpd
@@ -40,11 +39,11 @@ final_gdf = pd.concat([cbsa_gdf, non_cbsa_gdf], ignore_index=True)
 
 
 # 5. Simplify the geometry to reduce file size and improve rendering performance
-# The tolerance value may need adjustment.
+# Increasing the tolerance reduces polygon detail and file size.
 print("Simplifying geometry...")
 final_gdf['geometry'] = final_gdf.geometry.simplify(tolerance=0.025)
 
-# 6. Save the final, processed result to GeoJSON
+# 6. Save to GeoJSON
 print(f"Saving final shape to {output_geojson_path}...")
 final_gdf.to_file(output_geojson_path, driver='GeoJSON')
 
