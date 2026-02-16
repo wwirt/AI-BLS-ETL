@@ -1,6 +1,6 @@
 {
 "type": "FeatureCollection",
-"name": "national_map_shape",
+"name": "CBSA_shape",
 "features": [
 { "type": "Feature", "properties": { "CSAFP": "248", "CBSAFP": "22300", "GEOIDFQ": "310M700US22300", "GEOID": "22300", "NAME": "Findlay, OH", "NAMELSAD": "Findlay, OH Micro Area", "LSAD": "M2", "ALAND": 1376122055, "AWATER": 6024245, "area_type": "CBSA", "STATEFP": null, "STATENS": null, "STUSPS": null }, "geometry": { "type": "Polygon", "coordinates": [ [ [ -83.881149, 41.167824 ], [ -83.421054, 41.16678 ], [ -83.420319, 40.991889 ], [ -83.45785, 40.991671 ], [ -83.514728, 40.905115 ], [ -83.515883, 40.818134 ], [ -83.880063, 40.819919 ], [ -83.881149, 41.167824 ] ] ] } },
 { "type": "Feature", "properties": { "CSAFP": "544", "CBSAFP": "38920", "GEOIDFQ": "310M700US38920", "GEOID": "38920", "NAME": "Port Lavaca, TX", "NAMELSAD": "Port Lavaca, TX Micro Area", "LSAD": "M2", "ALAND": 1312947260, "AWATER": 1361644522, "area_type": "CBSA", "STATEFP": null, "STATENS": null, "STUSPS": null }, "geometry": { "type": "Polygon", "coordinates": [ [ [ -96.930367, 28.586728 ], [ -96.643442, 28.712105 ], [ -96.39954, 28.730231 ], [ -96.404445, 28.674409 ], [ -96.323522, 28.675597 ], [ -96.378533159286803, 28.389865030487901 ], [ -96.852070622730096, 28.059820861604599 ], [ -96.764325, 28.426242 ], [ -96.813494, 28.430261 ], [ -96.930367, 28.586728 ] ] ] } },

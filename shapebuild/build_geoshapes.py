@@ -11,7 +11,7 @@ script_dir = os.path.dirname(os.path.abspath(__file__))
 # Define paths to your source shapefiles by joining the script's directory with the relative paths
 cbsa_shp_path = os.path.join(script_dir, "shapefiles", "cb_2024_us_cbsa_20m.shp")
 state_shp_path = os.path.join(script_dir, "shapefiles", "cb_2024_us_state_20m.shp")
-output_geojson_path = os.path.join(script_dir, "national_map_shape.geojson")
+save_path = os.path.join(script_dir, "..", "input", "map_data", "CBSA_shape.geojson")
 
 # 1. Read the shapefiles directly into GeoDataFrames
 print("Reading shapefiles...")
@@ -44,7 +44,7 @@ print("Simplifying geometry...")
 final_gdf['geometry'] = final_gdf.geometry.simplify(tolerance=0.025)
 
 # 6. Save to GeoJSON
-print(f"Saving final shape to {output_geojson_path}...")
-final_gdf.to_file(output_geojson_path, driver='GeoJSON')
+print(f"Saving final shape to {save_path}...")
+final_gdf.to_file(save_path, driver='GeoJSON')
 
 print("Processing complete.")
