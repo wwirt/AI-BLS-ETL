@@ -23,35 +23,29 @@ if cbsa_gdf.crs != state_gdf.crs:
     print("CRS mismatch. Re-projecting state shapes to match CBSA shapes.")
     state_gdf = state_gdf.to_crs(cbsa_gdf.crs)
 
-# 2. Create a single unified geometry for all CBSAs and States
-print("Unifying CBSA shapes...")
-cbsa_unified = cbsa_gdf.unary_union
-print("Unifying state shapes...")
-state_unified = state_gdf.unary_union
-
-# 3. Subtract the unified CBSA shape from the unified state shape
+# 2. Subtract the CBSA shape from the state shape
 # This results in a geometry of areas that are in States but not in CBSAs.
 print("Finding non-CBSA areas by subtracting CBSA shape from state shape...")
 non_cbsa_areas = state_unified.difference(cbsa_unified)
 
-# 4. Create a GeoDataFrame for the non-CBSA areas
+# 3. Create a GeoDataFrame for the non-CBSA areas
 non_cbsa_gdf = gpd.GeoDataFrame(index=[0], crs=cbsa_gdf.crs, geometry=[non_cbsa_areas])
 non_cbsa_gdf['area_type'] = 'Non-CBSA'
 
 # Add an 'area_type' column to the original CBSA dataframe
 cbsa_gdf['area_type'] = 'CBSA'
 
-# 5. Combine the original CBSA shapes with the new non-CBSA shapes
+# 4. Combine the original CBSA shapes with the new non-CBSA shapes
 print("Combining CBSA and non-CBSA shapes...")
 final_gdf = gpd.pd.concat([cbsa_gdf, non_cbsa_gdf], ignore_index=True)
 
 
-# 6. Simplify the geometry to reduce file size and improve rendering performance
+# 5. Simplify the geometry to reduce file size and improve rendering performance
 # The tolerance value may need adjustment.
 print("Simplifying geometry...")
 final_gdf['geometry'] = final_gdf.geometry.simplify(tolerance=0.01)
 
-# 7. Save the final, processed result to GeoJSON
+# 6. Save the final, processed result to GeoJSON
 print(f"Saving final shape to {output_geojson_path}...")
 final_gdf.to_file(output_geojson_path, driver='GeoJSON')
 
