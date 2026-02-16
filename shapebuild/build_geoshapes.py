@@ -42,7 +42,7 @@ final_gdf = pd.concat([cbsa_gdf, non_cbsa_gdf], ignore_index=True)
 # 5. Simplify the geometry to reduce file size and improve rendering performance
 # The tolerance value may need adjustment.
 print("Simplifying geometry...")
-final_gdf['geometry'] = final_gdf.geometry.simplify(tolerance=0.01)
+final_gdf['geometry'] = final_gdf.geometry.simplify(tolerance=0.025)
 
 # 6. Save the final, processed result to GeoJSON
 print(f"Saving final shape to {output_geojson_path}...")
