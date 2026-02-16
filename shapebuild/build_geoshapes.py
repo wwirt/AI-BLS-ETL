@@ -5,6 +5,7 @@
 
 import geopandas as gpd
 import os
+import pandas as pd
 
 script_dir = os.path.dirname(os.path.abspath(__file__))
 
@@ -23,21 +24,19 @@ if cbsa_gdf.crs != state_gdf.crs:
     print("CRS mismatch. Re-projecting state shapes to match CBSA shapes.")
     state_gdf = state_gdf.to_crs(cbsa_gdf.crs)
 
-# 2. Subtract the CBSA shape from the state shape
-# This results in a geometry of areas that are in States but not in CBSAs.
-print("Finding non-CBSA areas by subtracting CBSA shape from state shape...")
-non_cbsa_areas = state_unified.difference(cbsa_unified)
-
-# 3. Create a GeoDataFrame for the non-CBSA areas
-non_cbsa_gdf = gpd.GeoDataFrame(index=[0], crs=cbsa_gdf.crs, geometry=[non_cbsa_areas])
+# 2. Use gpd.overlay() to subtract CBSA shapes from state shapes
+# This is the most efficient way to perform this operation.
+# It preserves state boundaries and attributes for the resulting non-CBSA areas.
+print("Calculating non-CBSA areas using overlay...")
+non_cbsa_gdf = gpd.overlay(state_gdf, cbsa_gdf, how='difference')
 non_cbsa_gdf['area_type'] = 'Non-CBSA'
 
-# Add an 'area_type' column to the original CBSA dataframe
+# 3. Prepare original CBSA data
 cbsa_gdf['area_type'] = 'CBSA'
 
 # 4. Combine the original CBSA shapes with the new non-CBSA shapes
 print("Combining CBSA and non-CBSA shapes...")
-final_gdf = gpd.pd.concat([cbsa_gdf, non_cbsa_gdf], ignore_index=True)
+final_gdf = pd.concat([cbsa_gdf, non_cbsa_gdf], ignore_index=True)
 
 
 # 5. Simplify the geometry to reduce file size and improve rendering performance
